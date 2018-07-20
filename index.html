@@ -1,34 +1,47 @@
 <!doctype html>
 <html lang="fr">
 <head>
-  <script>
+	<script>
 
-  </script>
-  <script type="text/javascript" charset="utf-8">
-    function init() {
-      document.getElementById("deserialize").onclick = deserialize;
-    }
+	</script>
+	<script type="text/javascript" charset="utf-8" src="https://momentjs.com/downloads/moment.min.js"></script>
+	<script type="text/javascript" charset="utf-8">
+		function init() {
+			moment.locale('fr');
+			document.getElementById("deserialize").onclick = deserialize;
+		}
 
-    function parseJwt(token) {
-      const base64Url = token.split('.')[1];
-      const base64 = base64Url.replace('-', '+').replace('_', '/');
-      return JSON.parse(window.atob(base64));
-    }
+		function parseJwt(token) {
+			const base64Url = token.split('.')[1];
+			const base64 = base64Url.replace('-', '+').replace('_', '/');
+			return JSON.parse(window.atob(base64));
+		}
 
-    function deserialize() {
-      const jwt = document.getElementById("jwt").value;
-      let parsedJwt;
-      if (jwt && jwt.length > 0) {
-        parsedJwt = parseJwt(jwt);
-      }
-      document.getElementById("json").innerHTML = JSON.stringify(parsedJwt, undefined, 2);
-    }
+		function improveJwt(parsedJwt) {
+			console.log(parsedJwt);
+			if (parsedJwt && parsedJwt.iat){
+				parsedJwt.iat = moment(parsedJwt.iat).format('LLLL');
+			}
+			if (parsedJwt && parsedJwt.exp){
+				parsedJwt.exp = moment(parsedJwt.exp).format('LLLL');
+			}
+			return parsedJwt
+		}
 
-  </script>
+		function deserialize() {
+			const jwt = document.getElementById("jwt").value;
+			let parsedJwt;
+			if (jwt && jwt.length > 0) {
+				parsedJwt = improveJwt(parseJwt(jwt));
+			}
+			document.getElementById("json").innerHTML = JSON.stringify(parsedJwt, undefined, 2);
+		}
+
+	</script>
 </head>
 <body onload="init();">
 <div>JWT Deserializer !</div>
-<textarea id="jwt"></textarea>
+<textarea id="jwt">eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImtpZCI6IlJVTkRSVVV3TUVaRlEwTXhSVVF4UkVKQlJFWTNNVGRHUXpnMU9VRTFRalF5UlVNeU5ERTNRUSJ9.eyJ1c2VyX2lkIjoiYXV0aDB8NWE5ZWM4YzI4NjRiMWYzYjIwNzhiMDY2IiwibmFtZSI6ImFkbWluQGZpbmFuY2VhY3RpdmUuY29tIiwiZW1haWwiOiJhZG1pbkBmaW5hbmNlYWN0aXZlLmNvbSIsImVtYWlsX3ZlcmlmaWVkIjp0cnVlLCJpZGVudGl0aWVzIjpbeyJ1c2VyX2lkIjoiNWE5ZWM4YzI4NjRiMWYzYjIwNzhiMDY2IiwicHJvdmlkZXIiOiJhdXRoMCIsImNvbm5lY3Rpb24iOiJUb3B0ZW4tRGV2IiwiaXNTb2NpYWwiOmZhbHNlfV0sInVzZXJfbWV0YWRhdGEiOnsiaGl2ZSI6eyJ0ZW5hbnRfaWRzIjpbIioiXX19LCJpc3MiOiJodHRwczovL2ZpbmFuY2VhY3RpdmUtZGV2LmV1LmF1dGgwLmNvbS8iLCJzdWIiOiJhdXRoMHw1YTllYzhjMjg2NGIxZjNiMjA3OGIwNjYiLCJhdWQiOiJRcVpnSGp2eDFKSU5uZjRiMzNqMTFsTmdRTERvajJuRiIsImlhdCI6MTUzMjA3NTI3MCwiZXhwIjoxNTMyMTYxNjcwfQ.E7i6c9T-4GPYxoxVYwvQ7rVLhKzs1oz-Tu6CFnmgs6oHM_RhUV6C_jHvVj_QzOqedOSzY9bMjtSSQfbnbEAbqNt0KJCyWXRCQtZTj4u_4Akt_aaScPMoX4BP4KWVhJmOYRNwS0efAtbju45bBPZNMfbqtMmZZefytsKjAgyy96JnzRavWQRRzpW8xJFDTNK7neW928QWN89Y02V9f4FAEBHoXysEM76HA2o_4gFFxjNuMT6UvQdA_0_GUNKV9KDw_PD4_CM7r1-gcbesUS_EyawH0C_42hHYv2x3IqCMdOrEVe9VnO49FLDJu01hVubcBFp-1ontzrUC1sMtb2VygA</textarea>
 <button id="deserialize">Deserialize</button>
 <pre id="json"></pre>
 
