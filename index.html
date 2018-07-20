@@ -20,10 +20,10 @@
 		function improveJwt(parsedJwt) {
 			console.log(parsedJwt);
 			if (parsedJwt && parsedJwt.iat){
-				parsedJwt.iat = moment(parsedJwt.iat).format('LLLL');
+				parsedJwt.iat = moment.unix(parsedJwt.iat).format('LLLL');
 			}
 			if (parsedJwt && parsedJwt.exp){
-				parsedJwt.exp = moment(parsedJwt.exp).format('LLLL');
+				parsedJwt.exp = moment.unix(parsedJwt.exp).format('LLLL');
 			}
 			return parsedJwt
 		}
