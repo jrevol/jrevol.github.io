@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <script>
+
+  </script>
+  <script type="text/javascript" charset="utf-8">
+    function init() {
+      document.getElementById("deserialize").onclick = deserialize;
+    }
+
+    function parseJwt(token) {
+      const base64Url = token.split('.')[1];
+      const base64 = base64Url.replace('-', '+').replace('_', '/');
+      return JSON.parse(window.atob(base64));
+    }
+
+    function deserialize() {
+      const jwt = document.getElementById("jwt").value;
+      let parsedJwt;
+      if (jwt && jwt.length > 0) {
+        parsedJwt = parseJwt(jwt);
+      }
+      document.getElementById("json").innerHTML = JSON.stringify(parsedJwt, undefined, 2);
+    }
+
+  </script>
+</head>
+<body onload="init();">
+<div>JWT Deserializer !</div>
+<textarea id="jwt"></textarea>
+<button id="deserialize">Deserialize</button>
+<pre id="json"></pre>
+
+</body>
+</html>
